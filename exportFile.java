@@ -1,4 +1,4 @@
-package logreader;
+=package logreader;
 
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
