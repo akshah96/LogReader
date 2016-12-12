@@ -11,17 +11,18 @@ import static logreader.LogReader.lastUpdatedField;
 
 class setIntervalFrame extends JPanel {
     //Buttons
-    private final JButton okButton = new JButton("OK");
-    private final JButton cancelButton = new JButton("Cancel");
+    public final JButton okButton = new JButton("OK");
+    public final JButton cancelButton = new JButton("Cancel");
     
     //Constants
     static final int INT_min = 0;
     static final int INT_max = 60;
-    static final int INT_init = 30;
-    public static int setIntervalFrameDelay = 30;
+    static final int INT_init = 5;
+    public static int setIntervalFrameDelay = 5;
     
     public setIntervalFrame() {
         super(new GridBagLayout());
+       
         
         //Create Labels
         JLabel intervalLabel = new JLabel("Interval Refresh Rate (Minutes):");
