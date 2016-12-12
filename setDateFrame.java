@@ -15,10 +15,9 @@ import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/**
- *
- * @author lynne
- */
+
+
+
 class setDateFrame extends JPanel implements PropertyChangeListener {
     //Labels and default values for user to input the date of log
     private final JLabel yearLabel;
@@ -99,7 +98,7 @@ class setDateFrame extends JPanel implements PropertyChangeListener {
         
         
         //Format and add panels
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        setBorder(BorderFactory.createEmptyBorder(18,18,18,18));
         add(labelPane, BorderLayout.CENTER);
         add(fieldPane, BorderLayout.LINE_END);
         
