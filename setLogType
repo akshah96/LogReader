@@ -1,0 +1,214 @@
+package logreader;
+
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import static logreader.LogReader.day;
+import static logreader.LogReader.lastUpdatedField;
+import static logreader.LogReader.month;
+import static logreader.LogReader.newline;
+import static logreader.LogReader.year;
+
+
+class setLogType extends JPanel{
+    //Labels, Text Field, and Menu
+    private JLabel logTypeLab;
+    private JLabel serverTypeLab;
+    private JLabel directoryTypeLab;
+    public static JTextField setLog;
+    public static JTextField setServer;
+    public static JTextField setDirectory;
+    private JMenu logTypeMenu;
+    private JMenu serverTypeMenu;
+    private JMenu directoryTypeMenu;
+    private JPanel labelPane;
+    private JPanel fieldPane;
+    private JPanel menuPane;
+    
+    //set String Labels
+    private final static String logString = "Log Type:";
+    private final static String serverString = "Server Type:";
+    private final static String directoryString = "Directory Type (ap119):";
+    public static String logType0;
+    public static String serverType0;
+    public static String directoryType0;
+    public static String inputLog = "prosight";
+    public static String inputServer = "wpp";
+    public static String inputDirectory = "d";
+    
+    //Buttons
+    public static JButton okButton = new JButton("OK");
+    public static JButton cancelButton = new JButton("Cancel");
+    
+    //MenuBar
+    public static final JMenuBar menuBar = new JMenuBar();    
+    
+   
+    
+    public setLogType() {
+        super(new BorderLayout());
+        setUpDisplay();
+    }
+    
+   
+    private void setUpDisplay() {
+        //Create Menus
+        logTypeMenu = new JMenu("Log Type");
+        serverTypeMenu = new JMenu("Server Type");
+        directoryTypeMenu = new JMenu("Directory Type");
+        
+        
+        //Create Labels and Text Field
+        logTypeLab = new JLabel(logString);
+        serverTypeLab = new JLabel(serverString);
+        directoryTypeLab = new JLabel(directoryString);
+        setLog = new JTextField();
+        setLog.setColumns(9);
+        setServer = new JTextField();
+        setServer.setColumns(9);
+        setDirectory = new JTextField();
+        setDirectory.setColumns(9);
+        logTypeLab.setLabelFor(setLog);
+        serverTypeLab.setLabelFor(setServer);
+        directoryTypeLab.setLabelFor(setDirectory);
+        
+        
+        //Create and set up text fields
+        JRadioButton functionLog = new JRadioButton("Function Log");
+        functionLog.setActionCommand("function Log");
+        JRadioButton projectBridgeLog = new JRadioButton("Project Bridge Log");
+        projectBridgeLog.setActionCommand("Project Bridge Log");
+        JRadioButton prosightLog = new JRadioButton("Prosight Log");
+        prosightLog.setActionCommand("Prosight Log");
+        ButtonGroup group0 = new ButtonGroup();
+        group0.add(functionLog);
+        group0.add(projectBridgeLog);
+        group0.add(prosightLog);
+        JRadioButton productionServer = new JRadioButton("Production Server");
+        productionServer.setActionCommand("Production Server");
+        JRadioButton testServer = new JRadioButton("Test Server");
+        testServer.setActionCommand("Test Server");
+        ButtonGroup group1 = new ButtonGroup();
+        group1.add(productionServer);
+        group1.add(testServer);
+        JRadioButton cDirectory = new JRadioButton("Front End Server (ap119c)");
+        cDirectory.setActionCommand("Front End Server (ap119c)");
+        JRadioButton dDirectory = new JRadioButton("Back End Server (ap119d)");
+        dDirectory.setActionCommand("Back End Server (ap119d)");
+        JRadioButton jDirectory = new JRadioButton("Front End Server (ap119j)");
+        jDirectory.setActionCommand("Front End Server (ap119j)");
+        JRadioButton kDirectory = new JRadioButton("Back End Server (ap119k)");
+        kDirectory.setActionCommand("Back End Server (ap119k)");
+        ButtonGroup group2 = new ButtonGroup();
+        group2.add(cDirectory);
+        group2.add(dDirectory);
+        group2.add(jDirectory);
+        group2.add(kDirectory);
+        //Add Tool Tips
+        prosightLog.setToolTipText("Set the log type to Prosight");
+        functionLog.setToolTipText("Set the log type to Function");
+        projectBridgeLog.setToolTipText("Set the log type to Project Bridge");
+        productionServer.setToolTipText("Set the server type to Production");
+        testServer.setToolTipText("Set the server type to Test");
+        cDirectory.setToolTipText("Set the server type to Front End (ap119c)");
+        dDirectory.setToolTipText("Set the server type to Back End (ap119d)");
+        jDirectory.setToolTipText("Set the server type to Front End (ap119j)");
+        kDirectory.setToolTipText("Set the server type to Back End (ap119k)");
+        //Add to Menu
+        menuBar.removeAll();
+        logTypeMenu.removeAll();
+        serverTypeMenu.removeAll();
+        directoryTypeMenu.removeAll();
+        logTypeMenu.add(functionLog);
+        logTypeMenu.add(projectBridgeLog);
+        logTypeMenu.add(prosightLog);
+        serverTypeMenu.add(productionServer);
+        serverTypeMenu.add(testServer);
+        directoryTypeMenu.add(cDirectory);
+        directoryTypeMenu.add(dDirectory);
+        directoryTypeMenu.add(jDirectory);
+        directoryTypeMenu.add(kDirectory);
+        menuBar.add(logTypeMenu);
+        menuBar.add(serverTypeMenu);
+        menuBar.add(directoryTypeMenu);
+        
+             
+        //Set up Panes
+        labelPane = new JPanel(new GridLayout(0,1));
+        menuPane = new JPanel(new GridLayout(0,1));
+        fieldPane = new JPanel(new GridLayout(0,1));
+        labelPane.removeAll();
+        menuPane.removeAll();
+        fieldPane.removeAll();
+        labelPane.add(logTypeLab);
+        labelPane.add(serverTypeLab);
+        labelPane.add(directoryTypeLab);
+        labelPane.add(okButton, BorderLayout.SOUTH); 
+        menuPane.add(menuBar);
+        fieldPane.add(setLog);
+        fieldPane.add(setServer);
+        fieldPane.add(setDirectory);
+        fieldPane.add(cancelButton, BorderLayout.SOUTH);
+        
+        
+        //Format and add panels
+        setBorder(BorderFactory.createEmptyBorder(18,18,18,18));
+        add(labelPane, BorderLayout.CENTER);
+        add(menuPane, BorderLayout.NORTH);
+        add(fieldPane, BorderLayout.LINE_END);
+        
+        
+        //Action Listeners
+        cDirectory.addActionListener((ActionEvent e) -> {
+            directoryType0 = "c";
+            setDirectory.setText(directoryType0);
+        });
+        dDirectory.addActionListener((ActionEvent e) -> {
+            directoryType0 = "d";
+            setDirectory.setText(directoryType0);
+        });
+        jDirectory.addActionListener((ActionEvent e) -> {
+            directoryType0 = "j";
+            setDirectory.setText(directoryType0);
+        });
+        kDirectory.addActionListener((ActionEvent e) -> {
+            directoryType0 = "k";
+            setDirectory.setText(directoryType0);
+        });
+        testServer.addActionListener((ActionEvent e) -> {
+            serverType0 = "wvs";
+            setServer.setText(serverType0);
+        });
+        productionServer.addActionListener((ActionEvent e) -> {
+            serverType0 = "wpp";
+            setServer.setText(serverType0);
+        });  
+        functionLog.addActionListener((ActionEvent e) -> {
+            logType0 = "function";
+            setLog.setText(logType0);
+        });  
+        projectBridgeLog.addActionListener((ActionEvent e) -> {
+            logType0 = "ProjectBridge";
+            setLog.setText(logType0);
+        });
+        prosightLog.addActionListener((ActionEvent e) -> {
+            logType0 = "prosight";
+            setLog.setText(logType0);
+        });
+        okButton.addActionListener((ActionEvent e) -> {
+            inputLog = setLog.getText();
+            inputServer = setServer.getText();
+            inputDirectory = setDirectory.getText();
+            
+            lastUpdatedField.setText("Press Start to retrieve the " + inputLog + " log in the " + inputServer + " server in the " + inputDirectory +  " server for the following date: " + String.format("%02d", month) + "/" + String.format("%02d", day) + "/" + String.format("%02d", year)+newline);
+            Window dialog = SwingUtilities.windowForComponent(okButton);
+            dialog.dispose();
+        });   
+        cancelButton.addActionListener((ActionEvent e) -> {
+            Window dialog = SwingUtilities.windowForComponent(cancelButton);
+            dialog.dispose();
+        });  
+    }
+}
