@@ -1,0 +1,423 @@
+package logreader;
+
+import java.awt.*;
+import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JPanel;
+import java.util.regex.*;
+import static logreader.LogReader.day;
+import static logreader.LogReader.lineCount;
+import static logreader.LogReader.month;
+import static logreader.LogReader.newLineCount;
+import static logreader.LogReader.newline;
+import static logreader.LogReader.year;
+
+
+class frontLogAnalysis extends JPanel{
+    //Labels, Text Field, and Menu
+    private JLabel logLab;
+    private JLabel dateLab;
+    private JLabel errorLab;
+    private JLabel runLab;
+    private JLabel statLab;
+    private JLabel timeStartLab;
+    private JLabel timeEndLab;
+    private JLabel logLab1;
+    private JLabel dateLab1;
+    private JLabel errorLab1;
+    private JLabel runLab1;
+    private JLabel statLab1;
+    private JLabel timeStartLab1;
+    private JLabel timeEndLab1;
+    public static JTextField prosightLog;
+    public static JTextField prosightDate;
+    public static JTextField prosightError;
+    public static JTextField prosightRun;
+    public static JTextField prosightStat;
+    public static JTextField prosightStartTime;
+    public static JTextField prosightEndTime;
+    public static JTextField pbLog;
+    public static JTextField pbDate;
+    public static JTextField pbError;
+    public static JTextField pbRun;
+    public static JTextField pbStat;
+    public static JTextField pbStartTime;
+    public static JTextField pbEndTime;
+    
+    //Important Log Info
+    public static int pbhours;
+    public static int pbminutes;
+    public static int pbstarthours;
+    public static int pbstartminutes;
+    public static int pbendhours;
+    public static int pbendminutes;
+    public static int prohours;
+    public static int prominutes;
+    public static int prostarthours;
+    public static int prostartminutes;
+    public static int proendhours;
+    public static int proendminutes;
+    
+   
+    
+    public frontLogAnalysis() {
+        super(new GridLayout());
+        setUpDisplay();
+    }
+    
+    
+   
+    private void setUpDisplay() {
+        //Create Menus
+        JTabbedPane tabbedPane = new JTabbedPane();
+        JComponent projectBridge = new JPanel(new GridLayout(0,1));
+        JComponent prosight = new JPanel(new GridLayout(0,1));
+        tabbedPane.addTab("Project Bridge Log Analysis",projectBridge);
+        tabbedPane.addTab("Prosight Log Analysis",prosight);
+        prosight.setPreferredSize(new Dimension(475,300));
+        projectBridge.setPreferredSize(new Dimension(475,300));
+        
+        
+        //Create Labels and Text Field
+        logLab = new JLabel("Log Name:");
+        dateLab = new JLabel("Date:");
+        errorLab = new JLabel("Error Count:");
+        runLab = new JLabel("Run Time:");
+        statLab = new JLabel("Log Status:");
+        timeStartLab = new JLabel("Start Time:");
+        timeEndLab = new JLabel("Latest End Time:");
+        
+        logLab1 = new JLabel("Log Name:");
+        dateLab1 = new JLabel("Date:");
+        errorLab1 = new JLabel("Error Count:");
+        runLab1 = new JLabel("Run Time:");
+        statLab1 = new JLabel("Log Status:");
+        timeStartLab1 = new JLabel("Start Time:");
+        timeEndLab1 = new JLabel("Latest End Time:");
+        
+        pbLog = new JTextField();
+        pbLog.setEditable(false);
+        pbLog.setColumns(9);
+        pbDate = new JTextField();
+        pbDate.setEditable(false);
+        pbDate.setColumns(9);
+        pbError = new JTextField();
+        pbError.setEditable(false);
+        pbError.setColumns(9);
+        pbRun = new JTextField();
+        pbRun.setEditable(false);
+        pbRun.setColumns(9);
+        pbStat = new JTextField();
+        pbStat.setEditable(false);
+        pbStat.setColumns(9);
+        pbStartTime = new JTextField();
+        pbStartTime.setEditable(false);
+        pbStartTime.setColumns(9);
+        pbEndTime = new JTextField();
+        pbEndTime.setEditable(false);
+        pbEndTime.setColumns(9);
+        
+        prosightLog = new JTextField();
+        prosightLog.setEditable(false);
+        prosightLog.setColumns(9);
+        prosightDate = new JTextField();
+        prosightDate.setEditable(false);
+        prosightDate.setColumns(9);
+        prosightError = new JTextField();
+        prosightError.setEditable(false);
+        prosightError.setColumns(9);
+        prosightRun = new JTextField();
+        prosightRun.setEditable(false);
+        prosightRun.setColumns(9);
+        prosightStat = new JTextField();
+        prosightStat.setEditable(false);
+        prosightStat.setColumns(9);
+        prosightStartTime = new JTextField();
+        prosightStartTime.setEditable(false);
+        prosightStartTime.setColumns(9);
+        prosightEndTime = new JTextField();
+        prosightEndTime.setEditable(false);
+        prosightEndTime.setColumns(9);
+        
+        
+        //Format and add panels
+        prosight.add(logLab);
+        prosight.add(prosightLog);
+        prosight.add(dateLab);
+        prosight.add(prosightDate);
+        prosight.add(errorLab);
+        prosight.add(prosightError);
+        prosight.add(statLab);
+        prosight.add(prosightStat);
+        prosight.add(runLab);
+        prosight.add(prosightRun);
+        prosight.add(timeStartLab);
+        prosight.add(prosightStartTime);
+        prosight.add(timeEndLab);
+        prosight.add(prosightEndTime);
+        
+        projectBridge.add(logLab1);
+        projectBridge.add(pbLog);
+        projectBridge.add(dateLab1);
+        projectBridge.add(pbDate);
+        projectBridge.add(errorLab1);
+        projectBridge.add(pbError);
+        projectBridge.add(statLab1);
+        projectBridge.add(pbStat);
+        projectBridge.add(runLab1);
+        projectBridge.add(pbRun);
+        projectBridge.add(timeStartLab1);
+        projectBridge.add(pbStartTime);
+        projectBridge.add(timeEndLab1);
+        projectBridge.add(pbEndTime);
+        
+        add(tabbedPane);
+        
+        
+        //Set Values
+        pbLog.setText("Project Bridge Log - P6/PPM");
+        prosightLog.setText("Prosight Function Log - PPM");
+        
+        ArrayList<String> monthMatrix = new ArrayList<>();
+        monthMatrix.add("January");
+        monthMatrix.add("February");
+        monthMatrix.add("March");
+        monthMatrix.add("April");
+        monthMatrix.add("May");
+        monthMatrix.add("June");
+        monthMatrix.add("July");
+        monthMatrix.add("August");
+        monthMatrix.add("September");
+        monthMatrix.add("October");
+        monthMatrix.add("November");
+        monthMatrix.add("December");     
+        pbDate.setText(monthMatrix.get(month-1) + " " + day + ", " + year);
+        prosightDate.setText(monthMatrix.get(month-1) + " " + day + ", " + year);
+        
+        String fileNamepb = "\\\\cp-wpp-ap119c\\log\\ProjectBridge_" + String.format("%02d", year) + "_" + String.format("%02d", month) + "_" + String.format("%02d", day) + ".log";
+        String pbType = "ProjectBridge";
+        String pbText = logRead(pbType, fileNamepb);
+        pbRun.setText(String.format("%02d", pbhours) + " hr(s) and " + String.format("%02d", pbminutes) + " min(s)");
+        pbStartTime.setText(String.format("%02d", pbstarthours) + ":" + String.format("%02d", pbstartminutes) + " EST");
+        pbEndTime.setText(String.format("%02d", pbendhours) + ":" + String.format("%02d", pbendminutes) + " EST");
+        
+        String fileNamepro = "\\\\cp-wpp-ap119c\\log\\prosight_" + String.format("%02d", year) + "_" + String.format("%02d", month) + "_" + String.format("%02d", day) + ".log";
+        String prosightType = "prosight";
+        String proText = logRead(prosightType, fileNamepro);
+        prosightRun.setText(String.format("%02d", prohours) + " hr(s) and " + String.format("%02d", prominutes) + " min(s)");
+        prosightStartTime.setText(String.format("%02d", prostarthours) + ":" + String.format("%02d", prostartminutes) + " EST");
+        prosightEndTime.setText(String.format("%02d", proendhours) + ":" + String.format("%02d", proendminutes) + " EST");
+        
+        int pbCount = errorCounter(pbText, pbType);
+        pbError.setText(String.format("%02d", pbCount));
+        if(pbCount > 0 && pbCount < 20){
+            pbError.setBackground(Color.YELLOW);
+        }
+        else if(pbCount >= 20){
+            pbError.setBackground(Color.RED);
+        }
+        
+        int prosightCount = errorCounter(proText, prosightType);
+        prosightError.setText(String.format("%02d", prosightCount));
+        if(prosightCount > 0 && prosightCount < 20){
+            prosightError.setBackground(Color.YELLOW);
+        }
+        else if(prosightCount >= 20){
+            prosightError.setBackground(Color.RED);
+        }
+        
+        String pbStatus = statusChecker(pbText);
+        pbStat.setText(pbStatus);
+        if("No Log for Date".equals(pbStatus)){
+            pbStat.setBackground(Color.RED);
+        }
+        
+        String proStatus = statusChecker(proText);
+        prosightStat.setText(proStatus);
+        if("No Log for Date".equals(proStatus)){
+            prosightStat.setBackground(Color.RED);
+        }
+    }
+    
+    
+    
+    private String logRead(String logType, String fileName){
+        String logText;
+        JTextArea textArea = new JTextArea(30, 65);
+        InputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        String line;
+        int i = 0;       
+               
+        File f = new File(fileName);
+        if(!f.isFile()){
+            if("ProjectBridge".equals(logType)){
+                pbhours = 0;
+                pbminutes = 0;
+            }
+            else if("prosight".equals(logType)){
+                prohours = 0;
+                prominutes = 0;
+            }
+            else{
+                i = 0;
+            }
+            logText = "No Log Available";
+            return logText;
+        }
+        else{
+            try{
+                fis = new FileInputStream(fileName);
+                isr = new InputStreamReader(fis);
+                br = new BufferedReader(new FileReader(fileName));
+                LineNumberReader reader = new LineNumberReader(br);
+                while((i=fis.read())!=-1){
+                   line = reader.readLine();
+                   lineCount=reader.getLineNumber();
+                    if(line==null || lineCount<=newLineCount){
+                        reader.setLineNumber(lineCount);
+                    }else{
+
+                       textArea.append(line+newline);
+                       newLineCount=lineCount;
+                    }
+                }
+                fis.close();
+                isr.close();
+                br.close();
+                lineCount=0;
+                newLineCount=0;
+            }catch(Exception ex){
+                Logger.getLogger(LogReader.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                if(fis!=null){
+                    try {
+                        fis.close();
+                        isr.close();
+                        br.close();
+                    }catch (IOException ex) {
+                        Logger.getLogger(LogReader.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        }
+        if("ProjectBridge".equals(logType)){
+            if(f.isFile()){
+                logText = textArea.getText();
+                String timeTag = "<time>";
+                String timeEndTag = "</time>";
+                String testValue = "<time>xx:xx:xx XX</time>";
+                String timeValue;
+                ArrayList<String> timeMatrix = new ArrayList<>();
+                int len = testValue.length();
+                int index = logText.indexOf(timeTag);
+                while ( index >= 0 ) {
+                    timeValue = logText.substring(index, index + len);
+                    timeMatrix.add(timeValue);
+                    index = logText.indexOf(timeTag, index+len);
+                }
+                int sizeof = timeMatrix.size();
+                String firstTime = timeMatrix.get(0);
+                String lastTime = timeMatrix.get(sizeof-1);
+                pbstarthours = Integer.parseInt(firstTime.substring(6, 8));
+                pbendhours = Integer.parseInt(lastTime.substring(6, 8));
+                pbstartminutes = Integer.parseInt(firstTime.substring(9, 11));
+                pbendminutes = Integer.parseInt(lastTime.substring(9, 11));
+                pbhours = pbendhours - pbstarthours;
+                pbminutes = pbendminutes - pbstartminutes;
+                if (pbminutes < 0){
+                    pbminutes+=60;
+                    pbhours--;
+                }
+                if (pbhours < 0){
+                    pbhours+=12;
+                }
+            }
+        }
+        if("prosight".equals(logType)){
+            if(f.isFile()){
+                logText = textArea.getText();
+                String pattern0 = "Time=.*Class";
+                Pattern timePattern = Pattern.compile(pattern0);
+                Matcher timeMatcher = timePattern.matcher(logText);
+                ArrayList<String> timeMatrix = new ArrayList<>();
+                while(timeMatcher.find()){
+                    timeMatrix.add(timeMatcher.group());
+                }
+                int sizeof = timeMatrix.size();
+                String firstTime = timeMatrix.get(0).replaceAll("[^0-9: ]", "");
+                String lastTime = timeMatrix.get(sizeof-1).replaceAll("[^0-9: ]", "");
+                int firsthour0 = firstTime.indexOf(" ");
+                int firsthour1 = firstTime.indexOf(":");
+                int lasthour0 = lastTime.indexOf(" ");
+                int lasthour1 = lastTime.indexOf(":");
+                int firstminute0 = firstTime.indexOf(":", firsthour1 + 1);
+                int lastminute0 = lastTime.indexOf(":", lasthour1 + 1);
+                prostarthours = Integer.parseInt(firstTime.substring(firsthour0, firsthour1).replaceAll("[^0-9]",""));
+                proendhours = Integer.parseInt(lastTime.substring(lasthour0, lasthour1).replaceAll("[^0-9]",""));
+                prostartminutes = Integer.parseInt(firstTime.substring(firsthour1, firstminute0).replaceAll("[^0-9]",""));
+                proendminutes = Integer.parseInt(lastTime.substring(lasthour1, lastminute0).replaceAll("[^0-9]",""));
+                prohours = proendhours - prostarthours;
+                prominutes = proendminutes - prostartminutes;
+                if (prominutes < 0){
+                    prominutes+=60;
+                    prohours--;
+                }
+            }
+        }
+        logText = textArea.getText();
+        return logText;
+    }
+    
+    
+    
+    private int errorCounter(String logText, String logType){
+        int count = 0;
+        String errorTag;
+        if("ProjectBridge".equals(logType)){
+            errorTag = "Errors Found";
+            count = -1;
+        }
+        else if("prosight".equals(logType)){
+            errorTag = "<Trace Type=";
+        }
+        else{
+            errorTag = "12345";
+        }
+        int len = errorTag.length();
+        int index = logText.indexOf(errorTag);
+        while ( index >= 0 ) {
+            count++;
+            index = logText.indexOf(errorTag, index+len);
+        }
+        if(count < 0){
+            count = 0;
+        }
+        
+        return count;
+    }
+    
+    
+    
+    private String statusChecker(String logText){
+        String status;
+        if("No Log Available".equals(logText)){
+            status = "No Log for Date";
+        }
+        else{
+            status = "Success";
+        }
+        return status;
+    }
+}
